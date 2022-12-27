@@ -1,57 +1,40 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
+import React, { useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { useAppDispatch } from "./app/hooks";
+import { ProductDetail } from "./features/productDetail/ProductDetail";
+import { ProductCreation } from "./features/productCreation/ProductCreation";
+import { ProductEdit } from "./features/productEdit/ProductEdit";
+import { ProductList } from "./features/productList/ProductList";
+import { getProductList } from "./features/productList/productListSlice";
+import Box from "@mui/material/Box";
+import Container from "@mui/material/Container";
+import { Button } from "@mui/material";
 
 function App() {
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(getProductList());
+  }, []);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
-    </div>
+    <Router>
+      <Container maxWidth="sm">
+        <Box padding="10px" marginBottom="10px">
+          <Link to="/" style={{ textDecoration: "none" }}>
+            <Button>Home</Button>
+          </Link>
+          <Link to="/create" style={{ textDecoration: "none" }}>
+            <Button>Aggiungi</Button>
+          </Link>
+        </Box>
+
+        <Routes>
+          <Route path="/" element={<ProductList />} />
+          <Route path="detail/:id" element={<ProductDetail />} />
+          <Route path="edit/:id" element={<ProductEdit />} />
+          <Route path="create" element={<ProductCreation />} />
+        </Routes>
+      </Container>
+    </Router>
   );
 }
 
